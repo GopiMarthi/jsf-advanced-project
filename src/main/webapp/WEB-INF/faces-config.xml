@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+              http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd"
+              version="2.3">
+
+    <name>jsf-advanced-demo</name>
+    
+    <!-- Application Configuration -->
+    <application>
+        <!-- Resource Bundle -->
+        <resource-bundle>
+            <base-name>messages</base-name>
+            <var>msg</var>
+        </resource-bundle>
+        
+        <!-- Locale Configuration -->
+        <locale-config>
+            <default-locale>en</default-locale>
+            <supported-locale>en</supported-locale>
+            <supported-locale>es</supported-locale>
+            <supported-locale>fr</supported-locale>
+        </locale-config>
+        
+        <!-- Message Bundle -->
+        <message-bundle>com.example.messages</message-bundle>
+        
+        <!-- Resource Handler -->
+        <resource-handler>
+            org.omnifaces.resourcehandler.CombinedResourceHandler
+        </resource-handler>
+        
+        <!-- EL Resolver -->
+        <el-resolver>
+            org.springframework.web.jsf.el.SpringBeanFacesELResolver
+        </el-resolver>
+        
+        <!-- Action Listener -->
+        <action-listener>
+            com.example.listeners.CustomActionListener
+        </action-listener>
+        
+        <!-- Navigation Handler -->
+        <navigation-handler>
+            com.example.navigation.CustomNavigationHandler
+        </navigation-handler>
+        
+        <!-- View Handler -->
+        <view-handler>
+            com.example.views.CustomViewHandler
+        </view-handler>
+        
+        <!-- State Manager -->
+        <state-manager>
+            com.example.state.CustomStateManager
+        </state-manager>
+        
+        <!-- Protected Views -->
+        <protected-views>
+            <url-pattern>/admin/*</url-pattern>
+            <url-pattern>/secure/*</url-pattern>
+        </protected-views>
+    </application>
+    
+    <!-- Factory Configuration -->
+    <factory>
+        <!-- Exception Handler Factory -->
+        <exception-handler-factory>
+            org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory
+        </exception-handler-factory>
+        
+        <!-- Faces Cache Factory -->
+        <faces-cache-factory>
+            org.omnifaces.cache.ehcache.EhCacheFacesCacheFactory
+        </faces-cache-factory>
+        
+        <!-- Partial View Context Factory -->
+        <partial-view-context-factory>
+            org.omnifaces.context.OmniPartialViewContextFactory
+        </partial-view-context-factory>
+        
+        <!-- RenderKit Factory -->
+        <render-kit-factory>
+            com.example.renderkit.CustomRenderKitFactory
+        </render-kit-factory>
+        
+        <!-- Visit Context Factory -->
+        <visit-context-factory>
+            org.omnifaces.context.OmniVisitContextFactory
+        </visit-context-factory>
+    </factory>
+    
+    <!-- Lifecycle Configuration -->
+    <lifecycle>
+        <phase-listener>com.example.listeners.PhaseListener</phase-listener>
+        <phase-listener>com.example.listeners.AuditPhaseListener</phase-listener>
+    </lifecycle>
+    
+    <!-- Validators -->
+    <validator>
+        <validator-id>com.example.PasswordValidator</validator-id>
+        <validator-class>com.example.validators.PasswordValidator</validator-class>
+    </validator>
+    
+    <validator>
+        <validator-id>com.example.EmailValidator</validator-id>
+        <validator-class>com.example.validators.EmailValidator</validator-class>
+    </validator>
+    
+    <!-- Converters -->
+    <converter>
+        <converter-id>com.example.CustomDateConverter</converter-id>
+        <converter-class>com.example.converters.CustomDateConverter</converter-class>
+    </converter>
+    
+    <converter>
+        <converter-for-class>java.time.LocalDateTime</converter-for-class>
+        <converter-class>com.example.converters.LocalDateTimeConverter</converter-class>
+    </converter>
+    
+    <!-- Components -->
+    <component>
+        <component-type>com.example.CustomDataTable</component-type>
+        <component-class>com.example.components.CustomDataTable</component-class>
+    </component>
+    
+    <!-- Behaviors -->
+    <behavior>
+        <behavior-id>com.example.AjaxBehavior</behavior-id>
+        <behavior-class>com.example.behaviors.CustomAjaxBehavior</behavior-class>
+    </behavior>
+    
+    <!-- Render Kits -->
+    <render-kit>
+        <render-kit-id>HTML_BASIC</render-kit-id>
+        <render-kit-class>com.example.renderkit.CustomRenderKit</render-kit-class>
+    </render-kit>
+    
+    <!-- Flow Definitions -->
+    <flow-definition id="registration">
+        <start-node>registration/start</start-node>
+        <view id="start">/registration/start.xhtml</view>
+        <view id="personal">/registration/personal.xhtml</view>
+        <view id="contact">/registration/contact.xhtml</view>
+        <view id="confirmation">/registration/confirmation.xhtml</view>
+        <switch id="checkAge">
+            <if>#{registrationBean.age >= 18}</if>
+            <then>adult</then>
+            <else>minor</else>
+        </switch>
+        <flow-return id="returnFromRegistration">
+            <from-outcome>/home</from-outcome>
+        </flow-return>
+    </flow-definition>
+    
+    <!-- Navigation Rules -->
+    <navigation-rule>
+        <from-view-id>/login.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{loginBean.login}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/dashboard.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>failure</from-outcome>
+            <to-view-id>/login.xhtml</to-view-id>
+            <redirect>
+                <view-param>
+                    <name>error</name>
+                    <value>true</value>
+                </view-param>
+            </redirect>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- Protected Views -->
+    <protected-views>
+        <url-pattern>/admin/*</url-pattern>
+        <url-pattern>/secure/*</url-pattern>
+    </protected-views>
+    
+    <!-- Ordering -->
+    <ordering>
+        <after>
+            <others />
+        </after>
+    </ordering>
+    
+    <!-- Absolute Ordering -->
+    <absolute-ordering>
+        <name>omnifaces</name>
+        <name>primefaces</name>
+        <others />
+    </absolute-ordering>
+    
+    <!-- EL Resolvers -->
+    <el-resolver>
+        org.springframework.web.jsf.el.SpringBeanFacesELResolver
+    </el-resolver>
+    
+    <!-- System Event Listeners -->
+    <system-event-listener>
+        <system-event-listener-class>
+            com.example.listeners.PostConstructApplicationEventListener
+        </system-event-listener-class>
+        <system-event-class>
+            javax.faces.event.PostConstructApplicationEvent
+        </system-event-class>
+    </system-event-listener>
+    
+    <!-- Default Validators -->
+    <default-validators>
+        <validator-id>javax.faces.Bean</validator-id>
+        <validator-id>javax.faces.Length</validator-id>
+        <validator-id>javax.faces.LongRange</validator-id>
+        <validator-id>javax.faces.DoubleRange</validator-id>
+        <validator-id>com.example.PasswordValidator</validator-id>
+    </default-validators>
+    
+    <!-- Default Converters -->
+    <default-converters>
+        <converter-for-class>java.lang.String</converter-for-class>
+        <converter-for-class>java.lang.Number</converter-for-class>
+        <converter-for-class>java.lang.Boolean</converter-for-class>
+        <converter-for-class>java.util.Date</converter-for-class>
+    </default-converters>
+    
+    <!-- Component Finders -->
+    <component-finder>
+        com.example.finder.CustomComponentFinder
+    </component-finder>
+    
+    <!-- View Declaration Language Factory -->
+    <view-declaration-language-factory>
+        com.example.vdl.CustomVDLFactory
+    </view-declaration-language-factory>
+    
+    <!-- Flash Factory -->
+    <flash-factory>
+        org.omnifaces.context.OmniFlashFactory
+    </flash-factory>
+    
+    <!-- Partial View Context Factory -->
+    <partial-view-context-factory>
+        org.omnifaces.context.OmniPartialViewContextFactory
+    </partial-view-context-factory>
+    
+    <!-- Exception Handler Factory -->
+    <exception-handler-factory>
+        org.omnifaces.exceptionhandler.FullAjaxExceptionHandlerFactory
+    </exception-handler-factory>
+    
+</faces-config>
