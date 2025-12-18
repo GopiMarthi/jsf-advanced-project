@@ -1,7 +1,6 @@
 package com.example.beans;
 
 import com.example.model.User;
-import com.example.exception.BusinessException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.omnifaces.util.Ajax;
@@ -13,10 +12,7 @@ import org.primefaces.model.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.enterprise.context.SessionScoped;
 import javax.faces.event.ActionEvent;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -26,6 +22,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+
+import jakarta.inject.Named;
+import org.omnifaces.cdi.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import com.example.exceptions.BusinessException;
+import com.example.services.UserService;
+import com.example.utils.FacesUtils;
 
 @Named
 @ViewScoped
@@ -66,7 +72,7 @@ public class UserBean implements Serializable {
     private String lastName;
 
     private boolean active = true;
-    private List<String> roles = new ArrayList<>();
+    private Set<String> roles = new HashSet<>();
     private LocalDateTime createdDate;
 
     // UI properties
@@ -184,7 +190,7 @@ public class UserBean implements Serializable {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.active = user.isActive();
-        this.roles = new ArrayList<>(user.getRoles());
+        this.roles = new HashSet<>(user.getRoles());
         this.createdDate = user.getCreatedDate();
         this.editMode = true;
     }
@@ -198,7 +204,7 @@ public class UserBean implements Serializable {
         this.firstName = "";
         this.lastName = "";
         this.active = true;
-        this.roles = new ArrayList<>();
+        this.roles = new HashSet<>();
         this.createdDate = null;
         this.editMode = false;
     }
@@ -296,11 +302,11 @@ public class UserBean implements Serializable {
         this.active = active;
     }
 
-    public List<String> getRoles() {
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<String> roles) {
+    public void setRoles(Set<String> roles) {
         this.roles = roles;
     }
 
@@ -407,8 +413,14 @@ public class UserBean implements Serializable {
         }
 
         @Override
-        public String getRowKey(User user) {
-            return user.getId().toString();
+        public int count(Map<String, FilterMeta> filters) {
+            try {
+                Map<String, String> serviceFilters = convertFilters(filters);
+                return userService.getUserCount(serviceFilters);
+            } catch (BusinessException e) {
+                logger.error("Error counting users", e);
+                return 0;
+            }
         }
 
         private Map<String, String> convertFilters(Map<String, FilterMeta> primeFilters) {

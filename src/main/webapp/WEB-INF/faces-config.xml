@@ -196,19 +196,19 @@
     </absolute-ordering>
     
     <!-- EL Resolvers -->
-    <el-resolver>
-        org.springframework.web.jsf.el.SpringBeanFacesELResolver
-    </el-resolver>
+    <absolute-ordering>
+        
+    </absolute-ordering>
     
     <!-- System Event Listeners -->
-    <system-event-listener>
+    <absolute-ordering>
         <system-event-listener-class>
             com.example.listeners.PostConstructApplicationEventListener
         </system-event-listener-class>
         <system-event-class>
             javax.faces.event.PostConstructApplicationEvent
         </system-event-class>
-    </system-event-listener>
+    </absolute-ordering>
     
     <!-- Default Validators -->
     <default-validators>
