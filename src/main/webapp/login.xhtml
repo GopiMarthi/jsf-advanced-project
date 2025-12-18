@@ -139,6 +139,14 @@
                                                         type="button" 
                                                         onclick="togglePassword()">
                                                     <i class="fas fa-eye"></i>
+                                                    <h:inputText id="email"
+             value="#{loginBean.email}"
+             required="true"
+             label="Email">
+    <f:validator validatorId="emailValidator"/>
+</h:inputText>
+<h:message for="email"/>
+
                                                 </button>
                                             </div>
                                         </div>

@@ -1,9 +1,15 @@
+C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\utils\AuthenticationUtils.java
+C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\utils\RegistrationUtils.java
+C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\utils\PasswordUtils.java
+C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\beans\LoginBean.java
+C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\model\User.java
 C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\beans\SessionBean.java
 C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\utils\FacesUtils.java
+C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\beans\RegistrationBean.java
 C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\beans\UserBean.java
-C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\beans\LoginBean.java
 C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\beans\PasswordValidator.java
 C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\beans\userService.java
+C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\validators\EmailValidator.java
+C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\validators\PasswordStrengthValidator.java
 C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\exceptions\BusinessException.java
 C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\services\UserService.java
-C:\Users\gopim\Documents\workspace-spring-tool-suite-4-4.26.0.RELEASE\jsf-advanced-demo\src\main\java\com\example\model\User.java

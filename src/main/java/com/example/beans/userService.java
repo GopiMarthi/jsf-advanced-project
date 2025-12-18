@@ -4,8 +4,8 @@ import com.example.model.User;
 import com.example.exceptions.BusinessException;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.primefaces.model.SortOrder;
 import java.util.HashMap;
@@ -86,7 +86,7 @@ public class userService {
             query += " ORDER BY u." + sortField + (sortOrder == SortOrder.ASCENDING ? " ASC" : " DESC");
         }
 
-        javax.persistence.Query q = em.createQuery(query, User.class);
+        javax.persistence.Query q = (Query) em.createQuery(query, User.class);
         for (Map.Entry<String, Object> param : params.entrySet()) {
             q.setParameter(param.getKey(), param.getValue());
         }
@@ -108,7 +108,7 @@ public class userService {
             }
         }
 
-        javax.persistence.Query q = em.createQuery(query, Long.class);
+        javax.persistence.Query q = (Query) em.createQuery(query, Long.class);
         for (Map.Entry<String, Object> param : params.entrySet()) {
             q.setParameter(param.getKey(), param.getValue());
         }

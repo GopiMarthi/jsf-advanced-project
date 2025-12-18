@@ -1,11 +1,13 @@
 package com.example.beans;
 
 import jakarta.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.logging.Logger;
+
+import com.example.model.User;
+import com.example.utils.AuthenticationUtils;
+import com.example.utils.FacesUtils;
 
 @Named
 @SessionScoped
@@ -22,35 +24,57 @@ public class LoginBean implements Serializable {
 
     public void init() {
         logger.info("LoginBean initialized");
+
+        // Check for remember me cookie
+        String rememberedUsername = AuthenticationUtils.getRememberMeCookie();
+        if (rememberedUsername != null) {
+            this.username = rememberedUsername;
+            this.rememberMe = true;
+        }
     }
 
     public String login() {
         logger.info("Login attempt for user: " + username);
 
-        // Simple authentication (for demo)
-        if ("admin".equals(username) && "admin123".equals(password)) {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO,
-                            "Login Successful", "Welcome back!"));
+        try {
+            // Authenticate user
+            User authenticatedUser = AuthenticationUtils.authenticate(username, password);
 
-            // Simulate login process
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+            if (authenticatedUser != null) {
+                // Login successful
+                AuthenticationUtils.loginUser(authenticatedUser);
+
+                // Handle remember me
+                if (rememberMe) {
+                    AuthenticationUtils.setRememberMeCookie(username);
+                }
+
+                FacesUtils
+                        .addSuccessMessage("Login successful! Welcome back, " + authenticatedUser.getFirstName() + "!");
+
+                // Simulate login process delay
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+
+                return "dashboard?faces-redirect=true";
+            } else {
+                // Login failed
+                FacesUtils.addErrorMessage("Invalid username or password");
+                return null;
             }
-
-            return "dashboard?faces-redirect=true";
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                            "Login Failed", "Invalid username or password"));
+        } catch (Exception e) {
+            logger.severe("Error during login: " + e.getMessage());
+            FacesUtils.addErrorMessage("Login failed due to system error");
             return null;
         }
     }
 
     public String logout() {
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        AuthenticationUtils.logoutUser();
+        FacesUtils.addInfoMessage("You have been logged out successfully");
         return "/login.xhtml?faces-redirect=true";
     }
 

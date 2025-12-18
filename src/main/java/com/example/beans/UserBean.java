@@ -1,8 +1,24 @@
 package com.example.beans;
 
-import com.example.model.User;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import jakarta.inject.Named;
+import org.omnifaces.cdi.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.annotation.PostConstruct;
+
+import javax.faces.event.ActionEvent;
+import javax.faces.event.NamedEvent;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import org.omnifaces.util.Ajax;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.FilterMeta;
@@ -12,24 +28,8 @@ import org.primefaces.model.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.faces.event.ActionEvent;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
-
-import jakarta.inject.Named;
-import org.omnifaces.cdi.ViewScoped;
-import jakarta.inject.Inject;
-import jakarta.annotation.PostConstruct;
 import com.example.exceptions.BusinessException;
+import com.example.model.User;
 import com.example.services.UserService;
 import com.example.utils.FacesUtils;
 

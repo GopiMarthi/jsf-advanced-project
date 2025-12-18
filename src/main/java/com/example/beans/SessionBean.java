@@ -1,11 +1,12 @@
 package com.example.beans;
 
 import com.example.model.User;
-import jakarta.inject.Named;
 import jakarta.enterprise.context.SessionScoped;
 import java.io.Serializable;
 
-@Named
+import javax.faces.event.NamedEvent;
+
+@NamedEvent
 @SessionScoped
 public class SessionBean implements Serializable {
 

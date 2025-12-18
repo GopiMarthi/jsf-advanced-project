@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:of="http://omnifaces.org/functions">
+
+<f:view locale="#{localeBean.locale}">
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{registrationBean.init}" />
+    </f:metadata>
+
+    <h:head>
+        <title>#{msg['registration.title']}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <!-- CSS Resources -->
+        <h:outputStylesheet name="css/registration.css" />
+        <h:outputStylesheet library="primefaces" name="theme.css" />
+        <h:outputStylesheet name="css/font-awesome.min.css" />
+
+        <!-- JS Resources -->
+        <h:outputScript name="js/registration.js" target="head" />
+        <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+
+        <style type="text/css">
+            .registration-container {
+                height: 100vh;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                overflow-y: auto;
+                padding: 20px 0;
+            }
+            .registration-card {
+                border-radius: 15px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                margin: 20px 0;
+            }
+            .registration-header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-top-left-radius: 15px;
+                border-top-right-radius: 15px;
+                padding: 30px;
+            }
+            .registration-body {
+                padding: 40px;
+                background-color: #ffffff;
+                border-bottom-left-radius: 15px;
+                border-bottom-right-radius: 15px;
+            }
+            .input-group-prepend {
+                background-color: #f8f9fa;
+                border-right: none;
+            }
+            .form-control {
+                border-left: none;
+            }
+            .btn-register {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border: none;
+                transition: all 0.3s ease;
+            }
+            .btn-register:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            }
+            .password-strength {
+                font-size: 0.875rem;
+                margin-top: 0.25rem;
+            }
+            .password-strength.weak {
+                color: #dc3545;
+            }
+            .password-strength.medium {
+                color: #ffc107;
+            }
+            .password-strength.strong {
+                color: #28a745;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <div class="registration-container d-flex align-items-center justify-content-center">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6">
+                        <div class="registration-card">
+                            <div class="registration-header text-center text-white">
+                                <h2 class="mb-3">
+                                    <i class="fas fa-user-plus mr-2"></i>#{msg['registration.title']}
+                                </h2>
+                                <p class="mb-0">#{msg['registration.subtitle']}</p>
+                            </div>
+
+                            <div class="registration-body">
+                                <h:form id="registrationForm" prependId="false">
+                                    <!-- Messages -->
+                                    <p:messages id="messages" showDetail="true"
+                                                closable="true" autoUpdate="true" />
+
+                                    <!-- CSRF Token -->
+                                    <input type="hidden" name="#{csrf.token.name}"
+                                           value="#{csrf.token}" />
+
+                                    <!-- Username Field -->
+                                    <div class="form-group mb-4">
+                                        <label for="username" class="form-label">
+                                            <i class="fas fa-user mr-2"></i>#{msg['registration.username']}
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-user"></i>
+                                                </span>
+                                            </div>
+                                            <h:inputText id="username"
+                                                         value="#{registrationBean.username}"
+                                                         styleClass="form-control"
+                                                         placeholder="#{msg['registration.username.placeholder']}"
+                                                         required="true"
+                                                         requiredMessage="#{msg['registration.username.required']}"
+                                                         autocomplete="username">
+                                                <f:validateLength minimum="3" maximum="50" />
+                                                <f:ajax event="blur" render="username_message" />
+                                            </h:inputText>
+                                        </div>
+                                        <h:message for="username" id="username_message"
+                                                   styleClass="text-danger small" />
+                                    </div>
+
+                                    <!-- Email Field -->
+                                    <div class="form-group mb-4">
+                                        <label for="email" class="form-label">
+                                            <i class="fas fa-envelope mr-2"></i>#{msg['registration.email']}
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-envelope"></i>
+                                                </span>
+                                            </div>
+                                            <h:inputText id="email"
+                                                         value="#{registrationBean.email}"
+                                                         styleClass="form-control"
+                                                         placeholder="#{msg['registration.email.placeholder']}"
+                                                         required="true"
+                                                         requiredMessage="#{msg['registration.email.required']}"
+                                                         autocomplete="email">
+                                                <f:validator validatorId="emailValidator" />
+                                                <f:ajax event="blur" render="email_message" />
+                                            </h:inputText>
+                                        </div>
+                                        <h:message for="email" id="email_message"
+                                                   styleClass="text-danger small" />
+                                    </div>
+
+                                    <!-- First Name and Last Name Row -->
+                                    <div class="form-row mb-4">
+                                        <div class="col-md-6">
+                                            <label for="firstName" class="form-label">
+                                                <i class="fas fa-id-card mr-2"></i>#{msg['registration.firstName']}
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="fas fa-id-card"></i>
+                                                    </span>
+                                                </div>
+                                                <h:inputText id="firstName"
+                                                             value="#{registrationBean.firstName}"
+                                                             styleClass="form-control"
+                                                             placeholder="#{msg['registration.firstName.placeholder']}"
+                                                             required="true"
+                                                             requiredMessage="#{msg['registration.firstName.required']}"
+                                                             autocomplete="given-name">
+                                                    <f:validateLength minimum="2" maximum="50" />
+                                                    <f:ajax event="blur" render="firstName_message" />
+                                                </h:inputText>
+                                            </div>
+                                            <h:message for="firstName" id="firstName_message"
+                                                       styleClass="text-danger small" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="lastName" class="form-label">
+                                                <i class="fas fa-id-card mr-2"></i>#{msg['registration.lastName']}
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="fas fa-id-card"></i>
+                                                    </span>
+                                                </div>
+                                                <h:inputText id="lastName"
+                                                             value="#{registrationBean.lastName}"
+                                                             styleClass="form-control"
+                                                             placeholder="#{msg['registration.lastName.placeholder']}"
+                                                             required="true"
+                                                             requiredMessage="#{msg['registration.lastName.required']}"
+                                                             autocomplete="family-name">
+                                                    <f:validateLength minimum="2" maximum="50" />
+                                                    <f:ajax event="blur" render="lastName_message" />
+                                                </h:inputText>
+                                            </div>
+                                            <h:message for="lastName" id="lastName_message"
+                                                       styleClass="text-danger small" />
+                                        </div>
+                                    </div>
+
+                                    <!-- Password Field -->
+                                    <div class="form-group mb-4">
+                                        <label for="password" class="form-label">
+                                            <i class="fas fa-key mr-2"></i>#{msg['registration.password']}
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-key"></i>
+                                                </span>
+                                            </div>
+                                            <h:inputSecret id="password"
+                                                           value="#{registrationBean.password}"
+                                                           styleClass="form-control"
+                                                           placeholder="#{msg['registration.password.placeholder']}"
+                                                           required="true"
+                                                           requiredMessage="#{msg['registration.password.required']}"
+                                                           autocomplete="new-password">
+                                                <f:validator validatorId="passwordStrengthValidator" />
+                                                <f:ajax event="blur" render="password_message password_strength" />
+                                                <f:ajax event="keyup" render="password_strength" />
+                                            </h:inputSecret>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary"
+                                                        type="button"
+                                                        onclick="togglePassword()">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <h:message for="password" id="password_message"
+                                                   styleClass="text-danger small" />
+                                        <div id="password_strength" class="password-strength">
+                                            <small>#{msg['registration.password.strength']}</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Confirm Password Field -->
+                                    <div class="form-group mb-4">
+                                        <label for="confirmPassword" class="form-label">
+                                            <i class="fas fa-key mr-2"></i>#{msg['registration.confirmPassword']}
+                                        </label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-key"></i>
+                                                </span>
+                                            </div>
+                                            <h:inputSecret id="confirmPassword"
+                                                           value="#{registrationBean.confirmPassword}"
+                                                           styleClass="form-control"
+                                                           placeholder="#{msg['registration.confirmPassword.placeholder']}"
+                                                           required="true"
+                                                           requiredMessage="#{msg['registration.confirmPassword.required']}"
+                                                           autocomplete="new-password">
+                                                <f:ajax event="blur" render="confirmPassword_message" />
+                                            </h:inputSecret>
+                                        </div>
+                                        <h:message for="confirmPassword" id="confirmPassword_message"
+                                                   styleClass="text-danger small" />
+                                    </div>
+
+                                    <!-- Terms and Conditions -->
+                                    <div class="form-group form-check mb-4">
+                                        <h:selectBooleanCheckbox id="acceptTerms"
+                                                                 value="#{registrationBean.acceptTerms}"
+                                                                 styleClass="form-check-input"
+                                                                 required="true"
+                                                                 requiredMessage="#{msg['registration.terms.required']}" />
+                                        <label class="form-check-label" for="acceptTerms">
+                                            #{msg['registration.terms.text']}
+                                            <h:link outcome="/terms" target="_blank"
+                                                    styleClass="text-decoration-none">
+                                                #{msg['registration.terms.link']}
+                                            </h:link>
+                                        </label>
+                                        <h:message for="acceptTerms" styleClass="text-danger small d-block" />
+                                    </div>
+
+                                    <!-- Register Button -->
+                                    <div class="form-group mb-3">
+                                        <h:commandButton id="registerBtn"
+                                                         value="#{msg['registration.button']}"
+                                                         action="#{registrationBean.register}"
+                                                         styleClass="btn btn-register btn-block py-3"
+                                                         style="font-weight: bold;">
+                                            <f:ajax execute="@form" render="messages"
+                                                    onevent="handleRegistrationAjax" />
+                                        </h:commandButton>
+                                    </div>
+
+                                    <!-- Already have account link -->
+                                    <div class="text-center">
+                                        <span class="text-muted">#{msg['registration.have.account']}</span>
+                                        <h:link outcome="/login"
+                                                 value="#{msg['registration.login']}"
+                                                 styleClass="font-weight-bold ml-1" />
+                                    </div>
+                                </h:form>
+                            </div>
+                        </div>
+
+                        <!-- Security Info -->
+                        <div class="mt-4 text-center text-white">
+                            <p class="small">
+                                <i class="fas fa-shield-alt mr-1"></i>
+                                #{msg['registration.security.info']}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript for password toggle -->
+        <script type="text/javascript">
+            function togglePassword() {
+                var passwordField = document.getElementById('password');
+                var toggleIcon = document.querySelector('#password + .input-group-append i');
+
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    toggleIcon.className = 'fas fa-eye-slash';
+                } else {
+                    passwordField.type = 'password';
+                    toggleIcon.className = 'fas fa-eye';
+                }
+            }
+
+            function handleRegistrationAjax(data) {
+                if (data.status === 'success') {
+                    // Optional: Add any post-registration UI effects
+                }
+            }
+
+            // Auto-focus username field on page load
+            $(document).ready(function() {
+                $('#username').focus();
+
+                // Handle Enter key press
+                $('#registrationForm input').keypress(function(e) {
+                    if (e.which === 13 && e.target.id !== 'acceptTerms') {
+                        $('#registerBtn').click();
+                        return false;
+                    }
+                });
+            });
+        </script>
+    </h:body>
+</f:view>
+</html>

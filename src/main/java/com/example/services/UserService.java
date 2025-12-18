@@ -35,6 +35,16 @@ public class UserService {
         }
     }
 
+    public User findByEmail(String email) {
+        try {
+            return em.createNamedQuery("User.findByEmail", User.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     @Transactional
     public void save(User user) throws BusinessException {
         try {
